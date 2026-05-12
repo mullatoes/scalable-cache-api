@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: scalable-cache-postgres
+    environment:
+      POSTGRES_DB: scalable_cache_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - scalable-cache-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: scalable_cache_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - scalable-cache-network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scalable-cache-api
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/scalable_cache_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+    networks:
+      - scalable-cache-network
+
+volumes:
+  postgres_data:
+
+networks:
+  scalable-cache-network:
+    driver: bridge
+
