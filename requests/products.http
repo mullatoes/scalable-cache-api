@@ -1,0 +1,47 @@
+### Create a product
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Mechanical Keyboard",
+  "description": "75% layout, hot-swappable switches",
+  "price": 129.99,
+  "quantityAvailable": 25
+}
+
+### Create another product
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "USB-C Hub",
+  "description": "7-in-1 with HDMI and SD card reader",
+  "price": 39.50,
+  "quantityAvailable": 100
+}
+
+### Get product by id (first call hits Postgres, populates Redis)
+GET {{host}}/api/v1/products/{{productId}}
+Accept: application/json
+
+### Get product by id again (should be served from Redis)
+GET {{host}}/api/v1/products/{{productId}}
+Accept: application/json
+
+### Get all products (not cached)
+GET {{host}}/api/v1/products
+Accept: application/json
+
+### Update product (refreshes the cached entry via @CachePut)
+PUT {{host}}/api/v1/products/{{productId}}
+Content-Type: application/json
+
+{
+  "name": "Mechanical Keyboard (v2)",
+  "description": "75% layout, hot-swappable switches, RGB",
+  "price": 149.99,
+  "quantityAvailable": 30
+}
+
+### Delete product (evicts from cache via @CacheEvict)
+DELETE {{host}}/api/v1/products/{{productId}}

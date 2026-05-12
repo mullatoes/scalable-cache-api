@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: scalable-cache-api
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/scalable_cache_db
+    username: postgres
+    password: Admin@123
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+server:
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+

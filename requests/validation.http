@@ -1,0 +1,46 @@
+### Missing name — expect 400
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "description": "No name provided",
+  "price": 10.00,
+  "quantityAvailable": 5
+}
+
+### Negative price — expect 400
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Invalid product",
+  "description": "Price below minimum",
+  "price": -1.00,
+  "quantityAvailable": 5
+}
+
+### Negative quantity — expect 400
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "Invalid product",
+  "description": "Quantity below zero",
+  "price": 10.00,
+  "quantityAvailable": -3
+}
+
+### Name too long (>100 chars) — expect 400
+POST {{host}}/api/v1/products
+Content-Type: application/json
+
+{
+  "name": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "description": "Too long",
+  "price": 10.00,
+  "quantityAvailable": 5
+}
+
+### Non-existent product — expect 404
+GET {{host}}/api/v1/products/999999
+Accept: application/json

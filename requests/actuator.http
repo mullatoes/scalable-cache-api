@@ -1,0 +1,19 @@
+### Health
+GET {{host}}/actuator/health
+Accept: application/json
+
+### Info
+GET {{host}}/actuator/info
+Accept: application/json
+
+### Metrics index
+GET {{host}}/actuator/metrics
+Accept: application/json
+
+### Specific metric — JVM memory used
+GET {{host}}/actuator/metrics/jvm.memory.used
+Accept: application/json
+
+### Specific metric — cache gets (Redis hits/misses)
+GET {{host}}/actuator/metrics/cache.gets
+Accept: application/json
