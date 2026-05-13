@@ -37,6 +37,9 @@ services:
       REDIS_PORT: 6379
       JWT_SECRET: this-is-a-very-long-docker-compose-secret-key
       JWT_EXPIRATION_MS: 86400000
+      REFRESH_TOKEN_EXPIRATION_MS: 604800000
+      ADMIN_EMAIL: admin@test.com
+      ADMIN_PASSWORD: password123
     ports:
       - "8080:8080"
     networks:

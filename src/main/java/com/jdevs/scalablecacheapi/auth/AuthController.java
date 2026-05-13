@@ -1,8 +1,7 @@
 package com.jdevs.scalablecacheapi.auth;
 
 
-import com.jdevs.scalablecacheapi.dto.LoginRequest;
-import com.jdevs.scalablecacheapi.dto.RegisterRequest;
+import com.jdevs.scalablecacheapi.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,5 +23,15 @@ public class AuthController {
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
+    }
+
+    @PostMapping("/refresh")
+    public AuthResponse refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return authService.refreshAccessToken(request);
+    }
+
+    @PostMapping("/logout")
+    public MessageResponse logout(@Valid @RequestBody LogoutRequest request) {
+        return authService.logout(request);
     }
 }

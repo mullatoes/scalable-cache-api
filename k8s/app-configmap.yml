@@ -6,4 +6,5 @@ data:
   DB_URL: jdbc:postgresql://postgres:5432/scalable_cache_db
   REDIS_HOST: redis
   REDIS_PORT: "6379"
-  JWT_EXPIRATION_MS: "86400000"
+  JWT_EXPIRATION_MS: "900000"
+  REFRESH_TOKEN_EXPIRATION_MS: "604800000"

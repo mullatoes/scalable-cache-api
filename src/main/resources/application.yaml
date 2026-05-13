@@ -33,7 +33,10 @@ app:
   security:
     jwt:
       secret: ${JWT_SECRET:this-is-a-very-long-local-development-secret-key}
-      expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+      expiration-ms: ${JWT_EXPIRATION_MS:900000} #15 minutes
+
+  refresh-token:
+    expiration-ms: ${REFRESH_TOKEN_EXPIRATION_MS:604800000} #7 days
 
   admin:
     email: ${ADMIN_EMAIL:admin@test.com}

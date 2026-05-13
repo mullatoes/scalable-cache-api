@@ -1,8 +1,9 @@
 package com.jdevs.scalablecacheapi.auth;
 
-import com.jdevs.scalablecacheapi.dto.LoginRequest;
-import com.jdevs.scalablecacheapi.dto.RegisterRequest;
+import com.jdevs.scalablecacheapi.dto.*;
+import com.jdevs.scalablecacheapi.entity.RefreshToken;
 import com.jdevs.scalablecacheapi.security.JwtService;
+import com.jdevs.scalablecacheapi.service.RefreshTokenService;
 import com.jdevs.scalablecacheapi.user.AppUser;
 import com.jdevs.scalablecacheapi.user.AppUserRepository;
 import com.jdevs.scalablecacheapi.user.Role;
@@ -20,6 +21,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthResponse register(RegisterRequest request) {
         if (appUserRepository.existsByEmail(request.email())) {
@@ -35,9 +37,11 @@ public class AuthService {
 
         AppUser savedUser = appUserRepository.save(user);
 
-        String token = jwtService.generateToken(savedUser);
+        String accessToken = jwtService.generateToken(savedUser);
 
-        return new AuthResponse(token, "Bearer");
+        String refreshToken = refreshTokenService.createRefreshToken(savedUser);
+
+        return new AuthResponse(accessToken, refreshToken, "Bearer");
     }
 
     public AuthResponse login(LoginRequest request) {
@@ -51,8 +55,25 @@ public class AuthService {
         AppUser user = appUserRepository.findByEmail(request.email())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid login credentials"));
 
-        String token = jwtService.generateToken(user);
+        String accessToken = jwtService.generateToken(user);
+        String refreshToken = refreshTokenService.createRefreshToken(user);
 
-        return new AuthResponse(token, "Bearer");
+        return new AuthResponse(accessToken, refreshToken, "Bearer");
+    }
+
+    public AuthResponse refreshAccessToken(RefreshTokenRequest request) {
+        RefreshToken refreshToken = refreshTokenService.validateRefreshToken(request.refreshToken());
+
+        AppUser user = refreshToken.getUser();
+
+        String newAccessToken = jwtService.generateToken(user);
+
+        return new AuthResponse(newAccessToken, request.refreshToken(), "Bearer");
+    }
+
+    public MessageResponse logout(LogoutRequest request) {
+        refreshTokenService.revokeRefreshToken(request.refreshToken());
+
+        return new MessageResponse("Logout successful");
     }
 }
