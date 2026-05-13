@@ -1,6 +1,8 @@
 package com.jdevs.scalablecacheapi.auth;
 
 
+import com.jdevs.scalablecacheapi.dto.LoginRequest;
+import com.jdevs.scalablecacheapi.dto.RegisterRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

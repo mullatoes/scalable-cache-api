@@ -1,8 +1,11 @@
 package com.jdevs.scalablecacheapi.auth;
 
+import com.jdevs.scalablecacheapi.dto.LoginRequest;
+import com.jdevs.scalablecacheapi.dto.RegisterRequest;
 import com.jdevs.scalablecacheapi.security.JwtService;
 import com.jdevs.scalablecacheapi.user.AppUser;
 import com.jdevs.scalablecacheapi.user.AppUserRepository;
+import com.jdevs.scalablecacheapi.user.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +30,7 @@ public class AuthService {
                 .fullName(request.fullName())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
-                .role(request.role())
+                .role(Role.USER)
                 .build();
 
         AppUser savedUser = appUserRepository.save(user);

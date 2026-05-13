@@ -1,4 +1,4 @@
-package com.jdevs.scalablecacheapi.auth;
+package com.jdevs.scalablecacheapi.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

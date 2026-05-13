@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: scalable-cache-api
-          image: scalable-cache-api:1.0.1
+          image: scalable-cache-api:1.0.2
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080
@@ -65,6 +65,17 @@ spec:
                 configMapKeyRef:
                   name: scalable-cache-api-config
                   key: JWT_EXPIRATION_MS
+            - name: ADMIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: ADMIN_EMAIL
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: ADMIN_PASSWORD
+
           readinessProbe:
             httpGet:
               path: /actuator/health/readiness
