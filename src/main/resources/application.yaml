@@ -29,4 +29,10 @@ management:
       exposure:
         include: health,info,metrics
 
+app:
+  security:
+    jwt:
+      secret: ${JWT_SECRET:this-is-a-very-long-local-development-secret-key}
+      expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+
 
