@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: scalable-cache-api
-          image: scalable-cache-api:1.0.4
+          image: scalable-cache-api:1.0.5
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

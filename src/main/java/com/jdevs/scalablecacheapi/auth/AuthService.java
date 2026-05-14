@@ -3,6 +3,7 @@ package com.jdevs.scalablecacheapi.auth;
 import com.jdevs.scalablecacheapi.dto.*;
 import com.jdevs.scalablecacheapi.entity.RefreshToken;
 import com.jdevs.scalablecacheapi.security.JwtService;
+import com.jdevs.scalablecacheapi.security.TokenBlacklistService;
 import com.jdevs.scalablecacheapi.service.RefreshTokenService;
 import com.jdevs.scalablecacheapi.user.AppUser;
 import com.jdevs.scalablecacheapi.user.AppUserRepository;
@@ -22,6 +23,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final RefreshTokenService refreshTokenService;
+    private final TokenBlacklistService tokenBlacklistService;
 
     public AuthResponse register(RegisterRequest request) {
         if (appUserRepository.existsByEmail(request.email())) {
@@ -71,8 +73,15 @@ public class AuthService {
         return new AuthResponse(newAccessToken, request.refreshToken(), "Bearer");
     }
 
-    public MessageResponse logout(LogoutRequest request) {
+    public MessageResponse logout(LogoutRequest request, String authorizationHeader) {
         refreshTokenService.revokeRefreshToken(request.refreshToken());
+
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            String accessToken = authorizationHeader.substring(7);
+            long remainingValidityMillis = jwtService.getRemainingValidityMillis(accessToken);
+
+            tokenBlacklistService.blacklistToken(accessToken, remainingValidityMillis);
+        }
 
         return new MessageResponse("Logout successful");
     }

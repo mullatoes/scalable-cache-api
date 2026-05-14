@@ -63,4 +63,14 @@ public class JwtService {
 
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+    public Date extractExpiration(String token) {
+        return extractAllClaims(token).getExpiration();
+    }
+
+    public long getRemainingValidityMillis(String token) {
+        Date expiration = extractExpiration(token);
+
+        return expiration.getTime() - System.currentTimeMillis();
+    }
 }

@@ -31,7 +31,10 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public MessageResponse logout(@Valid @RequestBody LogoutRequest request) {
-        return authService.logout(request);
+    public MessageResponse logout(
+            @Valid @RequestBody LogoutRequest request,
+            @RequestHeader(name = "Authorization", required = false) String authorizationHeader
+    ) {
+        return authService.logout(request, authorizationHeader);
     }
 }
